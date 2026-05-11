@@ -2,29 +2,46 @@ using UnityEngine;
 
 public class TargetMovement : MonoBehaviour
 {
-    public float maxDistance = 3;
-    public float maxPosition;
-    public float minPosition;
-    public float direction = 1;
-    public float speed;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    public Transform pointA;
+    public Transform pointB;
+
+    public float speed = 3f;
+
+    private Vector3 pointAPosition;
+    private Vector3 pointBPosition;
+
+    private Vector3 currentTarget;
+
     void Start()
     {
-        maxPosition = transform.position.x + maxDistance;
-        minPosition = transform.position.x - maxDistance;
-        speed = Random.value+1;
+        // Save the WORLD positions once
+        pointAPosition = pointA.position;
+        pointBPosition = pointB.position;
+
+        // Start moving toward B
+        currentTarget = pointBPosition;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if (transform.position.x > maxPosition)
+        transform.position = Vector3.MoveTowards(
+            transform.position,
+            currentTarget,
+            speed * Time.deltaTime
+        );
+
+        // Check if close enough
+        if (Vector3.Distance(transform.position, currentTarget) < 0.05f)
         {
-            direction *= -1;
-        }else if (transform.position.x < minPosition)
-        {
-            direction *= -1;
+            // Switch direction
+            if (currentTarget == pointAPosition)
+            {
+                currentTarget = pointBPosition;
+            }
+            else
+            {
+                currentTarget = pointAPosition;
+            }
         }
-        gameObject.transform.Translate(Vector3.right * Time.deltaTime * direction * speed);
     }
 }

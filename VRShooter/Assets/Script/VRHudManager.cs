@@ -14,6 +14,7 @@ public class VRHudManager : MonoBehaviour
     private int score = 0;
     private bool timerRunning = true;
 
+    public AudioSource audioSource;
     void Start()
     {
         UpdateScoreText();
@@ -37,6 +38,7 @@ public class VRHudManager : MonoBehaviour
             mainUI.SetActive(false);
             gameOverPanel.SetActive(true);
             endedScoreText.text = "End Score: " + score;
+            audioSource.Play();
         }
 
         UpdateTimerText();
